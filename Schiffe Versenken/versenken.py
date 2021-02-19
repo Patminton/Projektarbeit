@@ -2,41 +2,28 @@ import numpy as np
 import random as rd
 
 schlachtschiff = [1,1,1,1,1]
-kreuzer1 = [1,1,1,1]
-kreuzer2 = [1,1,1,1]
-zerstorer1 = [1,1,1]
-zerstorer2 = [1,1,1]
-zerstorer3 = [1,1,1]
-uboot1 = [1,1]
-uboot2 = [1,1]
-uboot3 = [1,1]
-uboot4 = [1,1]
+kreuzer1 = kreuzer2 = [1,1,1,1]
+zerstorer1 = zerstorer2 = zerstorer3 =[1,1,1]
+uboot1 = uboot2 = uboot3 = uboot4 = [1,1]
 
 def createField():
-    field = np.zeros((10,10),dtype = int)
-    return field
+    return np.zeros((10,10),dtype = int)
 
-
-def set(ship,field):
+def setship(ship,field):
     pos = createShipPos(field)
-   
     if checkHorizontal(pos,ship,field):
         insertShipHorizontal(pos,ship,field)
     elif checkVertical(pos,ship,field):
         insertShipVertical(pos,ship,field)
     else:
-        set(ship,field)
-
+        setship(ship,field)
 
 def createShipPos(field):
     x = rd.randint(0,9)
     y = rd.randint(0,9)
-    #print("Davor",x,y)
     if checkPos(x,y,field):
-        #print("Suche",(x,y))
         return (x,y)
     else: 
-        #print("suche2",x,y)
         return(createShipPos(field))
 
 def checkPos(x,y,field):
@@ -52,141 +39,80 @@ def checkPos(x,y,field):
         return False
     else:
          check = field[(x-1):(x+2),(y-1):(y+2)]
-         #print(check)
-    
-    if np.all((check==0)):
-        return True
-    else:
-        return False
-
+    return np.all((check==0))
 
 def checkHorizontal(pos,ship,field):
-    i=0
-    while i< len(ship) :
-        res = checkPos(pos[0],(pos[1]+i),field)               #horizontaler Check
-        if res == False:
-            return False
-            break
-        i=i+1
-    return True
+    if (pos[1]+len(ship) > 9):
+        return False
+    else:
+        return np.all((field[pos[0],pos[1]:pos[1]+len(ship)] == 0))
 
 def checkVertical(pos,ship,field):
-    i=0
-    while i< len(ship) :
-        res = checkPos((pos[0]+i),pos[1],field)             #vertikaler Check
-        if res == False:
-            return False                                    #wenn sowohl horizontal als auch vertikal nicht geht, dann neue Position für Schiff suchen
-            break
-        i=i+1
-    return True
-
-def insertShipHorizontal(pos,ship,field):
-    i=0
-    while i< len(ship) :
-        field[pos[0],(pos[1]+i)] = 1
-        i=i+1
-    return
-
-def insertShipVertical(pos,ship,field):
-    i=0
-    while i< len(ship):
-        field[(pos[0]+i),pos[1]] = 1
-        i=i+1
-    return
-
-#field = createField()
-#set(schlachtschiff,field)
-#set(kreuzer1,field)
-#set(kreuzer2,field)
-#set(zerstorer1,field)
-#set(zerstorer2,field)
-#set(zerstorer3,field)
-#set(uboot1,field)
-#set(uboot2,field)
-#set(uboot3,field)
-#set(uboot4,field)
-#print("Feld mit Schiffen\n", field)
-
-
-def games():
-    field=createField()
-    set(schlachtschiff,field)
-    set(kreuzer1,field)
-    set(kreuzer2,field)
-    set(zerstorer1,field)
-    set(zerstorer2,field)
-    set(zerstorer3,field)
-    set(uboot1,field)
-    set(uboot2,field)
-    set(uboot3,field)
-    set(uboot4,field)
-    counter=0
-    print("Bitte geben Sie eine Position ein auf die Sie schießen möchten.\nDas Spielfeld hat 10 Reihen(A-J) und 10 Zeilen(1-10).\nGeben Sie die Position in diesem Format 'A1' ein\n")
+    if (pos[0]+len(ship) > 9):
+        return False
+    else:
+        return np.all((field[pos[0]:pos[0]+len(ship),pos[1]] == 0))
     
+def insertShipHorizontal(pos,ship,field):
+    field[pos[0],pos[1]:pos[1]+len(ship)]=1
+    
+def insertShipVertical(pos,ship,field):
+    field[pos[0]:pos[0]+len(ship),pos[1]] = 1
+
+field = createField();setship(schlachtschiff,field);setship(kreuzer1,field)
+setship(kreuzer2,field);setship(zerstorer1,field);setship(zerstorer2,field)
+setship(zerstorer3,field);setship(uboot1,field);setship(uboot2,field)
+setship(uboot3,field);setship(uboot4,field);print("Feld mit Schiffen\n", field)
+
+def game(field):
+    counter=0
+    print("Bitte geben Sie eine Position ein auf die Sie schiessen moechten.\nDas Spielfeld hat 10 Reihen(A-J) und 10 Zeilen(1-10).\nGeben Sie die Position in diesem Format 'A1' ein\n")
     
     while not np.all((field==0)):
-        shot = input("Ziel eingeben:")
-        shot = list(shot)
-        while len(shot) != 2:
-            shot = input("Bitte Position in richtigem Format('A1,J10,usw') eingeben:")
-            shot = list(shot)
-        pos = (checkNum(shot),checkChar(shot))
-        checkHit(pos,field)
-        counter = counter+1
-        print(field)
+        shot = list(input("Ziel eingeben:"))
+        if len(shot) == 3:
+            if (shot[1]!= '1' or shot[2]!= '0'):
+                shot = list(input("Bitte Position in richtigem Format('A1,J10,usw') eingeben:"))
+            else:
+                pos = (9,checkChar(shot))
+                checkHit(pos,field)
+                counter = counter+1
+                print(field)
+        else:
+            while len(shot) != 2:
+                shot = list(input("Bitte Position in richtigem Format('A1,J10,usw') eingeben:"))
+            pos = (checkNum(shot),checkChar(shot))
+            checkHit(pos,field)
+            counter = counter+1
+            print(field)
     else:
-        print(f'Sie haben das Spiel mit {counter} Schüssen beendet')
+        print("Sie haben das Spiel mit {counter} Schuessen beendet")
     
-
 def checkChar(shot):
-    if shot[0]=='A':
-        y=0
-    elif shot[0]=='B':
-        y=1
-    elif shot[0]=='C':
-        y=2
-    elif shot[0]=='D':
-        y=3
-    elif shot[0]=='E':
-        y=4
-    elif shot[0]=='F':
-        y=5
-    elif shot[0]=='G':
-        y=6
-    elif shot[0]=='H':
-        y=7
-    elif shot[0]=='I':
-        y=8
-    elif shot[0]=='J':
-        y=9
+    input_letter= shot[0]
+    letters = 'abcdefghij'
+    converter = {letter: index for index, letter in enumerate(letters)}
+    if (input_letter.lower() in letters):
+        return converter[input_letter.lower()]
     else:
-        shot = input("Bitte Großbuchstaben von A-J eingeben:")
-        checkChar(list(shot))
-    return y
+        checkChar(list(input("Bitte Grossbuchstaben von A-J eingeben:")))
 
 def checkNum(shot):
-    
     if not shot[1].isdigit():
         shot = list(input("Bitte Zahl eingeben von 1-10:"))
-        shot.insert(0,'x')
+        shot.insert(0,'x')  #Platzhalter einfügen
         checkNum(shot)
     else:
-        num = int(shot[1])
-        x = num-1
-        return x
+        return (int(shot[1]))-1
 
 def checkHit(pos,field):
-    print(field[pos[0],pos[1]])
     if field[pos[0],pos[1]] == 1:
-        print("Treffer")
-        markAsHit(pos,field)
-        return True
+        print("Treffer");markAsHit(pos,field);return True
     else:
-       print("Daneben")
-       return False
+       print("Daneben");return False
 
 def markAsHit(pos,field):
     field[pos[0],pos[1]]=0
     return
 
-games()
+game(field)
