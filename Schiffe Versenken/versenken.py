@@ -1,5 +1,6 @@
 import numpy as np
 import random as rd
+import re
 
 schlachtschiff = [1,1,1,1,1]
 kreuzer1 = kreuzer2 = [1,1,1,1]
@@ -67,43 +68,22 @@ setship(uboot3,field);setship(uboot4,field);print("Feld mit Schiffen\n", field)
 def game(field):
     counter=0
     print("Bitte geben Sie eine Position ein auf die Sie schiessen moechten.\nDas Spielfeld hat 10 Reihen(A-J) und 10 Zeilen(1-10).\nGeben Sie die Position in diesem Format 'A1' ein\n")
-    
     while not np.all((field==0)):
-        shot = list(input("Ziel eingeben:"))
-        if len(shot) == 3:
-            if (shot[1]!= '1' or shot[2]!= '0'):
-                shot = list(input("Bitte Position in richtigem Format('A1,J10,usw') eingeben:"))
-            else:
-                pos = (9,checkChar(shot))
-                checkHit(pos,field)
-                counter = counter+1
-                print(field)
+        shot = re.search('([a-jA-J])+([1-9]|10)',input("Bitte Ziel eingeben: "))
+        if shot:
+            checkHit((int(shot.group(2))-1,checkChar(shot.group(1))),field)
         else:
-            while len(shot) != 2:
-                shot = list(input("Bitte Position in richtigem Format('A1,J10,usw') eingeben:"))
-            pos = (checkNum(shot),checkChar(shot))
-            checkHit(pos,field)
-            counter = counter+1
-            print(field)
+            print("Position nicht im Spielfeld. Erneut eingeben: ")
+            continue
+        counter= counter+1
     else:
         print("Sie haben das Spiel mit {counter} Schuessen beendet")
     
-def checkChar(shot):
-    input_letter= shot[0]
+def checkChar(char):
     letters = 'abcdefghij'
-    converter = {letter: index for index, letter in enumerate(letters)}
-    if (input_letter.lower() in letters):
-        return converter[input_letter.lower()]
-    else:
-        checkChar(list(input("Bitte Grossbuchstaben von A-J eingeben:")))
-
-def checkNum(shot):
-    if not shot[1].isdigit():
-        shot = list(input("Bitte Zahl eingeben von 1-10:"))
-        shot.insert(0,'x')  #Platzhalter einfügen
-        checkNum(shot)
-    else:
-        return (int(shot[1]))-1
+    converter = {chars: index for index, chars in enumerate(letters)}
+    print(converter[char.lower()])
+    return converter[char.lower()]
 
 def checkHit(pos,field):
     if field[pos[0],pos[1]] == 1:
