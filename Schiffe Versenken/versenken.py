@@ -10,11 +10,14 @@ def setShip(ship):
         (x,y)=(rd.randint(0,9),rd.randint(0,9-ship))
         if np.all(field[x,y:y+ship+1]==0):
             field[x,y:y+ship]=1
+            else:
+                setShip(ship)
     else:
         (x,y)=(rd.randint(0,9-ship),rd.randint(0,9))
         if np.all(field[x:x+ship+1,y]==0):
             field[x:x+ship,y]=1
-        else setShip(ship)
+        else:
+           setShip(ship)
       
 field = np.zeros((10,10),dtype = int)
 
