@@ -2,13 +2,12 @@ import numpy as np
 import random as rd
 import re
 
-schlachtschiff = [1,1,1,1,1]
-kreuzer1 = kreuzer2 = [1,1,1,1]
-zerstorer1 = zerstorer2 = zerstorer3 =[1,1,1]
-uboot1 = uboot2 = uboot3 = uboot4 = [1,1]
-
-def createField():
-    return np.zeros((10,10),dtype = int)
+schlachtschiff = 5
+kreuzer = 4
+zerstorer = 3
+uboot = 2
+#field als globale Variable:
+#field = np.zeros((10,10)dtype = int) - dann brauchen wir es nicht mehr übergeben -> Sparrt uns das wirklich zeilen??
 
 def setship(ship,field):
     pos = createShipPos(field)
@@ -18,6 +17,19 @@ def setship(ship,field):
         insertShipVertical(pos,ship,field)
     else:
         setship(ship,field)
+
+def setShip(ship):
+    x = rd.randint(0,1)
+    if x and np.all(field(rd.randint(0,9),rd.randint(0,9-ship))==0):
+        np.all((field[pos[0],pos[1]:pos[1]+len(ship)] == 0))
+
+
+def createCorrectShipPos(ship):             # Funktion sollte nur gültige Startpunkte in abhängigkeit der Schiffslänge ermitteln
+    
+    if rd.randint(0,1):                     # 1 = horizontal; 0 = vertical
+        return (rd.randint(0,9),rd.randint(0,9-ship),1) #1 für horizontal
+    else:
+        return (rd.randint(0,9-ship),rd.randint(0,9,0)
 
 def createShipPos(field):
     x = rd.randint(0,9)
@@ -60,10 +72,12 @@ def insertShipHorizontal(pos,ship,field):
 def insertShipVertical(pos,ship,field):
     field[pos[0]:pos[0]+len(ship),pos[1]] = 1
 
-field = createField();setship(schlachtschiff,field);setship(kreuzer1,field)
-setship(kreuzer2,field);setship(zerstorer1,field);setship(zerstorer2,field)
-setship(zerstorer3,field);setship(uboot1,field);setship(uboot2,field)
-setship(uboot3,field);setship(uboot4,field);print("Feld mit Schiffen\n", field)
+field = np.zeros((10,10),dtype = int)
+setship(schlachtschiff,1,field)
+setship(kreuzer,2,field)
+setship(zerstorer,3,field)
+setship(uboot,4,field)
+print("Feld mit Schiffen\n", field) Schiffen\n", field)
 
 def game(field):
     counter=0
