@@ -45,7 +45,6 @@ def checkMarkHit(pos):
         print("Daneben")
 
 
-schiffe = [5,4,4,3,3,3,2,2,2,2]
 field = np.zeros((10,10),dtype = int)
-for schiff in schiffe: setShip(schiff)
+for schiff in [5,4,4,3,3,3,2,2,2,2]: setShip(schiff)
 game()
