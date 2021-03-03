@@ -32,7 +32,7 @@ def game():
             continue
         counter = counter + 1
     else:
-        print("Sie haben das Spiel mit {counter} Schuessen beendet")
+        print(f"Sie haben das Spiel mit {counter} Schuessen beendet")
 
 
 def checkchar(char):
