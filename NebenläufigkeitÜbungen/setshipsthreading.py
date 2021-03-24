@@ -22,7 +22,6 @@ def setship(ship):
         else:
             setship(ship)
 
-
 lockMe = threading.Lock()
 threads = []
 starttime = time.time()
