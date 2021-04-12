@@ -1,0 +1,150 @@
+digraph {
+  node [label="N", fillcolor="#FFFFFF", fontcolor="#000000", style=filled];
+  edge [style="solid"];
+  graph [splines="true", overlap="false"];
+  subgraph cluster_2129595699360 {
+    graph [
+      style="invis"
+    ];
+    node_4
+      [
+        shape="ellipse"
+        label="volle Dollys\n{}"
+        tooltip="volle Dollys"
+        id="node_4"
+      ];
+    node_1
+      [
+        shape="ellipse"
+        label="Kran\n{1}"
+        tooltip="Kran"
+        id="node_1"
+      ];
+    node_7
+      [
+        shape="rectangle"
+        label="bestuecken\nTrue"
+        tooltip="bestuecken"
+        id="node_7"
+      ];
+    node_0
+      [
+        shape="ellipse"
+        label="Bestellung\n{3}"
+        tooltip="Bestellung"
+        id="node_0"
+      ];
+    node_8
+      [
+        shape="rectangle"
+        label="Dolly Entladen\nTrue"
+        tooltip="Dolly Entladen"
+        id="node_8"
+      ];
+    node_6
+      [
+        shape="ellipse"
+        label="Kapazität Presse\n{1}"
+        tooltip="Kapazität Presse"
+        id="node_6"
+      ];
+    node_2
+      [
+        shape="ellipse"
+        label="Bauteile\n{2}"
+        tooltip="Bauteile"
+        id="node_2"
+      ];
+    node_5
+      [
+        shape="ellipse"
+        label="Dolly in Presse\n{2}"
+        tooltip="Dolly in Presse"
+        id="node_5"
+      ];
+    node_9
+      [
+        shape="rectangle"
+        label="In Presse fahren\nTrue"
+        tooltip="In Presse fahren"
+        id="node_9"
+      ];
+    node_3
+      [
+        shape="ellipse"
+        label="freie Dollys\n{}"
+        tooltip="freie Dollys"
+        id="node_3"
+      ];
+    node_0 -> node_7
+      [
+        arrowhead="normal"
+        label=" x "
+      ];
+    node_2 -> node_7
+      [
+        arrowhead="normal"
+        label=" t "
+      ];
+    node_3 -> node_7
+      [
+        arrowhead="normal"
+        label=" d "
+      ];
+    node_1 -> node_7
+      [
+        arrowhead="normal"
+        label=" k "
+      ];
+    node_7 -> node_1
+      [
+        arrowhead="normal"
+        label=" k "
+      ];
+    node_7 -> node_4
+      [
+        arrowhead="normal"
+        label=" d "
+      ];
+    node_1 -> node_8
+      [
+        arrowhead="normal"
+        label=" k "
+      ];
+    node_5 -> node_8
+      [
+        arrowhead="normal"
+        label=" d "
+      ];
+    node_8 -> node_1
+      [
+        arrowhead="normal"
+        label=" k "
+      ];
+    node_8 -> node_3
+      [
+        arrowhead="normal"
+        label=" d "
+      ];
+    node_4 -> node_9
+      [
+        arrowhead="normal"
+        label=" d "
+      ];
+    node_6 -> node_9
+      [
+        arrowhead="normal"
+        label=" kapazitat "
+      ];
+    node_9 -> node_6
+      [
+        arrowhead="normal"
+        label=" kapazitat "
+      ];
+    node_9 -> node_5
+      [
+        arrowhead="normal"
+        label=" d "
+      ];
+  }
+}
