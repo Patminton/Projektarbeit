@@ -45,7 +45,7 @@ def m1(token):                                              #sendet Befehl Trans
     places.get("Kapazität M1").pop(0)
 
     starttime = time.time()
-    time.sleep(10)
+    time.sleep(2)
     print('Dauer: {}'.format(time.time() - starttime))
                                                             #Serverantwort abwarten, Danach muss Token weitergegeben werden und Kapazität wieder eingefügt werden
     places.get("Zwischenprodukte").insert(0, token)
@@ -77,7 +77,7 @@ def m3(token):                                              #sendet Befehl Trans
         time.sleep(20)
     else:
         time.sleep(10)
-    print('Dauer: {}'.format(time.time() - starttime))
+
 
                                                             #Serverantwort abwarten, Danach muss Token weitergegeben werden und Kapazität wieder eingefügt werden
     places.get("fertige Teilprodukte").insert(0, token)
@@ -124,8 +124,8 @@ def check(token, trans):
 print(places)
 t1 = myThread("M1", "A")
 t2 = myThread("M1", "B")
-
 t1.start()
 t2.start()
-
+t1.join()
+t2.join()
 print(places)
