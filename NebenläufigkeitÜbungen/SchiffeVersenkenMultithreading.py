@@ -37,7 +37,7 @@ class Setship(threading.Thread):
             #print("\nStarte", self.iD)
             Setship.setship(i)
             Setship.ship.pop(0)
-            lockMe.release() 
+            lockMe.release()
             #print("\nBeende",self.iD)
 
 
