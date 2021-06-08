@@ -13,20 +13,20 @@ class myThread(threading.Thread):
     def run(self):
         if self.transition == "M1":
             #TODO
-            print("Transition M1 schalten")
+            print("Transition M1 schalten mit Token " + self.token)
             m1(self.token)
         if self.transition == "M2":
             #TODO
-            print("Transition M2 schalten")
+            print("Transition M2 schalten mit Token " + self.token)
             m2(self.token)
         if self.transition == "M3":
             #TODO
-            print("Transition M3 schalten")
+            print("Transition M3 schalten mit Token " + self.token)
             m3(self.token)
         if self.transition == "Zusammenbauen":
             #TODO
             print("Transition Zusammenbauen schalten")
-            Zusammenbauen(self.token)
+            Zusammenbauen()
 
 
 
@@ -45,8 +45,8 @@ def m1(token):                                              #sendet Befehl Trans
     places.get("Kapazität M1").pop(0)
 
     starttime = time.time()
-    time.sleep(2)
-    print('Dauer: {}'.format(time.time() - starttime))
+    time.sleep(10)
+    print(token + ' mit einer Dauer: {}'.format(time.time() - starttime)+ "\n")
                                                             #Serverantwort abwarten, Danach muss Token weitergegeben werden und Kapazität wieder eingefügt werden
     places.get("Zwischenprodukte").insert(0, token)
     places.get("Kapazität M1").insert(0,"CAP")
@@ -62,14 +62,14 @@ def m2(token):                                              #sendet Befehl Trans
         time.sleep(30)
     else:
         time.sleep(15)
-    print('Dauer: {}'.format(time.time() - starttime))
+    print(token + ' mit einer Dauer: {}'.format(time.time() - starttime)+ "\n")
                                                             #Serverantwort abwarten, Danach muss Token weitergegeben werden und Kapazität wieder eingefügt werden
     places.get("fertige Teilprodukte").insert(0, token)
     places.get("Kapazität M2").insert(0,"CAP")
     return #Ergebnis von Antwort
 
 def m3(token):                                              #sendet Befehl Transition M1 an MQTT Server und erhält Antwort nach bestimmter Zeit
-    places.get("fertige Teilprodukte").pop(0)                   #wenn antwort negativ, dann token wieder in Bestellungen einfügen
+    places.get("Zwischenprodukte").pop(0)                   #wenn antwort negativ, dann token wieder in Bestellungen einfügen
     places.get("Kapazität M3").pop(0)
 
     starttime = time.time()
@@ -77,7 +77,7 @@ def m3(token):                                              #sendet Befehl Trans
         time.sleep(20)
     else:
         time.sleep(10)
-
+    print(token + ' mit einer Dauer: {}'.format(time.time() - starttime)+ "\n")
 
                                                             #Serverantwort abwarten, Danach muss Token weitergegeben werden und Kapazität wieder eingefügt werden
     places.get("fertige Teilprodukte").insert(0, token)
@@ -89,7 +89,9 @@ def Zusammenbauen():                                        #sendet Befehl Trans
     for i in range(3):
             places.get("fertige Teilprodukte").pop(0)                   #wenn antwort negativ, dann token wieder in Bestellungen einfügen
     
+    starttime = time.time()
     time.sleep(20)
+    print("Zusammenbauen mit Dauer: {}".format(time.time() - starttime)+ "\n")
                                                             #Serverantwort abwarten, Danach muss Token weitergegeben werden und Kapazität wieder eingefügt werden
     places.get("Platz").insert(0, "abc")
     return #Ergebnis von Antwort
@@ -127,5 +129,21 @@ t2 = myThread("M1", "B")
 t1.start()
 t2.start()
 t1.join()
+t1 = myThread("M2", "A")
+t1.start()
 t2.join()
+t2 = myThread("M1", "C")
+t2.start()
+t3 = myThread("M3", "B")
+t3.start()
+t3.join()
+t2.join()
+t3 = myThread("M3", "C")
+t3.start()
+t3.join()
+t1.join()
+t1 = myThread("Zusammenbauen", "")
+t1.start()
+t1.join()
 print(places)
+print("Gesamtablaufdauer: {}".format(time.time() - startablauf))
