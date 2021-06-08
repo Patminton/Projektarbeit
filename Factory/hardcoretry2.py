@@ -1,6 +1,34 @@
 import threading
 import time
 
+startablauf = time.time()
+
+class myThread(threading.Thread):
+    def __init__(self, transition, token):
+        threading.Thread.__init__(self)
+        self.transition = transition
+        self.token = token
+
+
+    def run(self):
+        if self.transition == "M1":
+            #TODO
+            print("Transition M1 schalten")
+            m1(self.token)
+        if self.transition == "M2":
+            #TODO
+            print("Transition M2 schalten")
+            m2(self.token)
+        if self.transition == "M3":
+            #TODO
+            print("Transition M3 schalten")
+            m3(self.token)
+        if self.transition == "Zusammenbauen":
+            #TODO
+            print("Transition Zusammenbauen schalten")
+            Zusammenbauen(self.token)
+
+
 
 places = {
     "Bestellungen": ["A", "B", "C"],
@@ -15,6 +43,10 @@ places = {
 def m1(token):                                              #sendet Befehl Transition M1 an MQTT Server und erhält Antwort nach bestimmter Zeit
     places.get("Bestellungen").pop(0)                       #wenn antwort negativ, dann token wieder in Bestellungen einfügen
     places.get("Kapazität M1").pop(0)
+
+    starttime = time.time()
+    time.sleep(10)
+    print('Dauer: {}'.format(time.time() - starttime))
                                                             #Serverantwort abwarten, Danach muss Token weitergegeben werden und Kapazität wieder eingefügt werden
     places.get("Zwischenprodukte").insert(0, token)
     places.get("Kapazität M1").insert(0,"CAP")
@@ -24,6 +56,13 @@ def m1(token):                                              #sendet Befehl Trans
 def m2(token):                                              #sendet Befehl Transition M1 an MQTT Server und erhält Antwort nach bestimmter Zeit
     places.get("Zwischenprodukte").pop(0)                   #wenn antwort negativ, dann token wieder in Bestellungen einfügen
     places.get("Kapazität M2").pop(0)
+
+    starttime = time.time()
+    if token == "A":
+        time.sleep(30)
+    else:
+        time.sleep(15)
+    print('Dauer: {}'.format(time.time() - starttime))
                                                             #Serverantwort abwarten, Danach muss Token weitergegeben werden und Kapazität wieder eingefügt werden
     places.get("fertige Teilprodukte").insert(0, token)
     places.get("Kapazität M2").insert(0,"CAP")
@@ -32,6 +71,14 @@ def m2(token):                                              #sendet Befehl Trans
 def m3(token):                                              #sendet Befehl Transition M1 an MQTT Server und erhält Antwort nach bestimmter Zeit
     places.get("fertige Teilprodukte").pop(0)                   #wenn antwort negativ, dann token wieder in Bestellungen einfügen
     places.get("Kapazität M3").pop(0)
+
+    starttime = time.time()
+    if token == "C":
+        time.sleep(20)
+    else:
+        time.sleep(10)
+    print('Dauer: {}'.format(time.time() - starttime))
+
                                                             #Serverantwort abwarten, Danach muss Token weitergegeben werden und Kapazität wieder eingefügt werden
     places.get("fertige Teilprodukte").insert(0, token)
     places.get("Kapazität M3").insert(0,"CAP")
@@ -41,6 +88,8 @@ def m3(token):                                              #sendet Befehl Trans
 def Zusammenbauen():                                        #sendet Befehl Transition M1 an MQTT Server und erhält Antwort nach bestimmter Zeit
     for i in range(3):
             places.get("fertige Teilprodukte").pop(0)                   #wenn antwort negativ, dann token wieder in Bestellungen einfügen
+    
+    time.sleep(20)
                                                             #Serverantwort abwarten, Danach muss Token weitergegeben werden und Kapazität wieder eingefügt werden
     places.get("Platz").insert(0, "abc")
     return #Ergebnis von Antwort
@@ -72,5 +121,11 @@ def check(token, trans):
     else:
         raise Exception("Falsche Transition")
 
+print(places)
+t1 = myThread("M1", "A")
+t2 = myThread("M1", "B")
 
-check("A", "M1")
+t1.start()
+t2.start()
+
+print(places)
