@@ -147,3 +147,4 @@ t1.start()
 t1.join()
 print(places)
 print("Gesamtablaufdauer: {}".format(time.time() - startablauf))
+
